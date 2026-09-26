@@ -6,6 +6,20 @@ import urllib.parse
 
 app = func.FunctionApp()
 
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
+                use_monitor=False)
+def timer_trigger(myTimer: func.TimerRequest) -> None:
+    usuario = os.getenv("USER")
+    banco_dados = os.getenv("DATABASE")
+    servidor = os.getenv("HOST")
+    senha = os.getenv("PASSWORD")
+
+    print(servidor)
+    logging.info(usuario)
+    logging.info(banco_dados)
+    logging.info(servidor)
+    logging.info(senha)
+
 @app.schedule(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=True,
               use_monitor=False) 
 def timer_trigger_turmac(myTimer: func.TimerRequest) -> None:
