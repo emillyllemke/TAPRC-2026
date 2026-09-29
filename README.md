@@ -27,3 +27,6 @@ Esta aplicacao usa Python com o modelo v2 do Azure Functions. A funcao `timer_tr
 	```
 
 O intervalo pode ser alterado pela configuracao `TIMER_SCHEDULE` em `local.settings.json`, usando o formato CRON de seis campos do Azure Functions.
+
+### Desenho do projeto
+<img width="1887" height="1043" alt="image" src="https://github.com/user-attachments/assets/8f8ddffa-4358-4551-89f5-83457e44d378" />
