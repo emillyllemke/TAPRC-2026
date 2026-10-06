@@ -7,6 +7,7 @@ import pyodbc
 
 app = func.FunctionApp()
 
+#chamado
 @app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
                 use_monitor=False)
 def extract_chamado(myTimer: func.TimerRequest) -> None:
@@ -56,6 +57,7 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
     #Fazer um select * na tabela
     #Imprimir os dados da tabela usando logging.info
 
+#Chamado_sla
 @app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
                 use_monitor=False)
 def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
@@ -100,6 +102,22 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
     logging.info(database_sql)
     logging.info(host_sql)
     logging.info(password_sql)
+
+    #analista
+
+    #categoria
+
+    #chamado_status_historico
+
+    #cliente_organizacao
+
+    #csat_avaliacao
+
+    #fila
+
+    #sla
+
+    #solicitante
 
 @app.schedule(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=True,
               use_monitor=False) 
