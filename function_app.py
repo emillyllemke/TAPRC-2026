@@ -111,9 +111,85 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
 
     #cliente_organizacao
 
-    #csat_avaliacao
+    #csat_avaliacao e fila
+    #Primeira função - duda
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer",
+                   run_on_startup=False, use_monitor=False)
+def extract_csat_avaliacao(myTimer: func.TimerRequest) -> None:
 
-    #fila
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
+
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;"
+        "Connection Timeout=30;"
+    )
+
+    try:
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT * FROM itsm.csat_avaliacao")
+            rows = cursor.fetchall()
+
+            if not rows:
+                logging.info("A tabela csat_avaliacao não retornou dados.")
+            else:
+                for row in rows:
+                    logging.info(f"CSAT_AVALIACAO: {row}")
+
+    except pyodbc.Error as e:
+        logging.error(
+            f"Erro ao conectar ou consultar a tabela csat_avaliacao: {e}"
+        )
+        
+ 
+    #Segunda função - duda 
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer",
+                   run_on_startup=False, use_monitor=False)
+def extract_fila(myTimer: func.TimerRequest) -> None:
+
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
+
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;"
+        "Connection Timeout=30;"
+    )
+
+    try:
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("SELECT * FROM itsm.fila")
+            rows = cursor.fetchall()
+
+            if not rows:
+                logging.info("A tabela fila não retornou dados.")
+            else:
+                for row in rows:
+                    logging.info(f"FILA: {row}")
+
+    except pyodbc.Error as e:
+        logging.error(
+            f"Erro ao conectar ou consultar a tabela fila: {e}"
+        )
 
     #sla
 
