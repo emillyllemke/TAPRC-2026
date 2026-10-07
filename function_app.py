@@ -103,9 +103,97 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
     logging.info(host_sql)
     logging.info(password_sql)
 
-    #analista
+#analista
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
+            use_monitor=False)
+def extract_analista(myTimer: func.TimerRequest) -> None:
+    #importar variáveis de ambiente
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
+    
+    #como criar uma connection string usando pyodbc
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;" 
+        "Connection Timeout=30;"
+    )
+    try:
+        # Criar a conexao com o banco 
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            
+            # fazer um select * na tabela 
+            cursor.execute("SELECT * FROM itsm.analista")
+            rows = cursor.fetchall()
+            
+            # imprimir os dados da tabela usando logging.info()
+            if not rows:
+                logging.info("A consulta não retornou nenhum dado.")
+            else:
+                for row in rows:
+                    logging.info(f"Registro encontrado: {row}")
+                    
+    except pyodbc.Error as e:
+        logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
 
-    #categoria
+    print(host_sql)
+    logging.info(user_sql)
+    logging.info(database_sql)
+    logging.info(host_sql)
+    logging.info(password_sql)
+
+#categoria
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
+            use_monitor=False)
+def extract_categoria(myTimer: func.TimerRequest) -> None:
+    #importar variáveis de ambiente
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
+    
+    #como criar uma connection string usando pyodbc
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;" 
+        "Connection Timeout=30;"
+    )
+    try:
+        # Criar a conexao com o banco 
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            
+            # fazer um select * na tabela 
+            cursor.execute("SELECT * FROM itsm.categoria")
+            rows = cursor.fetchall()
+            
+            # imprimir os dados da tabela usando logging.info()
+            if not rows:
+                logging.info("A consulta não retornou nenhum dado.")
+            else:
+                for row in rows:
+                    logging.info(f"Registro encontrado: {row}")
+                    
+    except pyodbc.Error as e:
+        logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
+
+    print(host_sql)
+    logging.info(user_sql)
+    logging.info(database_sql)
+    logging.info(host_sql)
+    logging.info(password_sql)
 
     #chamado_status_historico
 
