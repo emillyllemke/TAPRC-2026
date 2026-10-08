@@ -16,7 +16,7 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
     database_sql = os.getenv("DATABASE")
     host_sql = os.getenv("HOST")
     password_sql = os.getenv("PASSWORD")
-    
+
     #como criar uma connection string usando pyodbc
     conn_str = (
         "DRIVER={ODBC Driver 18 for SQL Server};"
@@ -25,25 +25,25 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
         f"UID={user_sql};"
         f"PWD={{{password_sql}}};"
         "Encrypt=yes;"
-        "TrustServerCertificate=no;" 
+        "TrustServerCertificate=no;"
         "Connection Timeout=30;"
     )
     try:
-        # Criar a conexao com o banco 
+        # Criar a conexao com o banco
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            
-            # fazer um select * na tabela 
+
+            # fazer um select * na tabela
             cursor.execute("SELECT * FROM itsm.chamado")
             rows = cursor.fetchall()
-            
+
             # imprimir os dados da tabela usando logging.info()
             if not rows:
                 logging.info("A consulta não retornou nenhum dado.")
             else:
                 for row in rows:
                     logging.info(f"Registro encontrado: {row}")
-                    
+
     except pyodbc.Error as e:
         logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
 
@@ -66,7 +66,7 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
     database_sql = os.getenv("DATABASE")
     host_sql = os.getenv("HOST")
     password_sql = os.getenv("PASSWORD")
-    
+
     #como criar uma connection string usando pyodbc
     conn_str = (
         "DRIVER={ODBC Driver 18 for SQL Server};"
@@ -75,25 +75,25 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
         f"UID={user_sql};"
         f"PWD={{{password_sql}}};"
         "Encrypt=yes;"
-        "TrustServerCertificate=no;" 
+        "TrustServerCertificate=no;"
         "Connection Timeout=30;"
     )
     try:
-        # Criar a conexao com o banco 
+        # Criar a conexao com o banco
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            
-            # fazer um select * na tabela 
+
+            # fazer um select * na tabela
             cursor.execute("SELECT * FROM itsm.chamado_sla")
             rows = cursor.fetchall()
-            
+
             # imprimir os dados da tabela usando logging.info()
             if not rows:
                 logging.info("A consulta não retornou nenhum dado.")
             else:
                 for row in rows:
                     logging.info(f"Registro encontrado: {row}")
-                    
+
     except pyodbc.Error as e:
         logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
 
@@ -112,7 +112,7 @@ def extract_analista(myTimer: func.TimerRequest) -> None:
     database_sql = os.getenv("DATABASE")
     host_sql = os.getenv("HOST")
     password_sql = os.getenv("PASSWORD")
-    
+
     #como criar uma connection string usando pyodbc
     conn_str = (
         "DRIVER={ODBC Driver 18 for SQL Server};"
@@ -121,25 +121,25 @@ def extract_analista(myTimer: func.TimerRequest) -> None:
         f"UID={user_sql};"
         f"PWD={{{password_sql}}};"
         "Encrypt=yes;"
-        "TrustServerCertificate=no;" 
+        "TrustServerCertificate=no;"
         "Connection Timeout=30;"
     )
     try:
-        # Criar a conexao com o banco 
+        # Criar a conexao com o banco
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            
-            # fazer um select * na tabela 
+
+            # fazer um select * na tabela
             cursor.execute("SELECT * FROM itsm.analista")
             rows = cursor.fetchall()
-            
+
             # imprimir os dados da tabela usando logging.info()
             if not rows:
                 logging.info("A consulta não retornou nenhum dado.")
             else:
                 for row in rows:
                     logging.info(f"Registro encontrado: {row}")
-                    
+
     except pyodbc.Error as e:
         logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
 
@@ -158,7 +158,7 @@ def extract_categoria(myTimer: func.TimerRequest) -> None:
     database_sql = os.getenv("DATABASE")
     host_sql = os.getenv("HOST")
     password_sql = os.getenv("PASSWORD")
-    
+
     #como criar uma connection string usando pyodbc
     conn_str = (
         "DRIVER={ODBC Driver 18 for SQL Server};"
@@ -167,25 +167,25 @@ def extract_categoria(myTimer: func.TimerRequest) -> None:
         f"UID={user_sql};"
         f"PWD={{{password_sql}}};"
         "Encrypt=yes;"
-        "TrustServerCertificate=no;" 
+        "TrustServerCertificate=no;"
         "Connection Timeout=30;"
     )
     try:
-        # Criar a conexao com o banco 
+        # Criar a conexao com o banco
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            
-            # fazer um select * na tabela 
+
+            # fazer um select * na tabela
             cursor.execute("SELECT * FROM itsm.categoria")
             rows = cursor.fetchall()
-            
+
             # imprimir os dados da tabela usando logging.info()
             if not rows:
                 logging.info("A consulta não retornou nenhum dado.")
             else:
                 for row in rows:
                     logging.info(f"Registro encontrado: {row}")
-                    
+
     except pyodbc.Error as e:
         logging.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
 
@@ -238,9 +238,9 @@ def extract_csat_avaliacao(myTimer: func.TimerRequest) -> None:
         logging.error(
             f"Erro ao conectar ou consultar a tabela csat_avaliacao: {e}"
         )
-        
- 
-    #Segunda função - duda 
+
+
+    #Segunda função - duda
 @app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer",
                    run_on_startup=False, use_monitor=False)
 def extract_fila(myTimer: func.TimerRequest) -> None:
@@ -279,12 +279,74 @@ def extract_fila(myTimer: func.TimerRequest) -> None:
             f"Erro ao conectar ou consultar a tabela fila: {e}"
         )
 
-    #sla
+#sla
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False)
+def extract_sla(myTimer: func.TimerRequest) -> None:
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
 
-    #solicitante
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;"
+        "Connection Timeout=30;"
+    )
+    try:
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM itsm.sla")
+            rows = cursor.fetchall()
 
+            if not rows:
+                logging.info("A tabela sla não retornou dados.")
+            else:
+                for row in rows:
+                    logging.info(f"SLA: {row}")
+
+    except pyodbc.Error as e:
+        logging.error(f"Erro ao conectar ou consultar a tabela sla: {e}")
+
+
+#solicitante
+@app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False)
+def extract_solicitante(myTimer: func.TimerRequest) -> None:
+    user_sql = os.getenv("USER")
+    database_sql = os.getenv("DATABASE")
+    host_sql = os.getenv("HOST")
+    password_sql = os.getenv("PASSWORD")
+
+    conn_str = (
+        "DRIVER={ODBC Driver 18 for SQL Server};"
+        f"SERVER={host_sql};"
+        f"DATABASE={database_sql};"
+        f"UID={user_sql};"
+        f"PWD={{{password_sql}}};"
+        "Encrypt=yes;"
+        "TrustServerCertificate=no;"
+        "Connection Timeout=30;"
+    )
+    try:
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM itsm.solicitante")
+            rows = cursor.fetchall()
+
+            if not rows:
+                logging.info("A tabela solicitante não retornou dados.")
+            else:
+                for row in rows:
+                    logging.info(f"SOLICITANTE: {row}")
+
+    except pyodbc.Error as e:
+        logging.error(f"Erro ao conectar ou consultar a tabela solicitante: {e}")
 @app.schedule(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=True,
-              use_monitor=False) 
+              use_monitor=False)
 def timer_trigger_turmac(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
         logging.info('The timer is past due!')
