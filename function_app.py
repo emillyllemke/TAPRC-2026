@@ -10,13 +10,7 @@ app = func.FunctionApp()
 #chamado
 @app.timer_trigger(schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False,
                 use_monitor=False)
-def 
-
-
-
-
-
-extract_chamado(myTimer: func.TimerRequest) -> None:
+def extract_chamado(myTimer: func.TimerRequest) -> None:
     #importar variáveis de ambiente
     user_sql = os.getenv("USER")
     database_sql = os.getenv("DATABASE")
