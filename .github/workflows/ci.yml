@@ -11,3 +11,19 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 --version
       - run: python3 -m py_compile function_app.py
+
+      # Instalação das dependências de validação (ruff, black e isort)
+      - name: Instalar ferramentas de lint e formatação
+        run: pip install ruff black isort
+
+      # 1. VERIFICAÇÃO DE IMPORTS: isort
+      - name: Verificação de imports (isort)
+        run: isort --check-only --profile black .
+
+      # 2. FORMATAÇÃO AUTOMÁTICA: black
+      - name: Formatação automática (Black)
+        run: black --check .
+
+      # 3. LINTING: ruff
+      - name: Linting e padrões PEP8 (Ruff)
+        run: ruff check .
