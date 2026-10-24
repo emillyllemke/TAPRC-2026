@@ -1,26 +1,32 @@
 import logging
 import os
+import io
+import csv
+from datetime import datetime, timezone
 
 import azure.functions as func
 import pyodbc
+from azure.storage.filedatalake import DataLakeServiceClient
 
 app = func.FunctionApp()
 
 logger = logging.getLogger(__name__)
 
+# chamado
 
 # chamado
 @app.timer_trigger(
-    schedule="0 * * * * *", arg_name="myTimer", run_on_startup=False, use_monitor=False
+    schedule="0 * * * * *",
+    arg_name="myTimer",
+    run_on_startup=False,
+    use_monitor=False
 )
 def extract_chamado(myTimer: func.TimerRequest) -> None:
-    # importar variáveis de ambiente
     user_sql = os.getenv("USER")
     database_sql = os.getenv("DATABASE")
     host_sql = os.getenv("HOST")
     password_sql = os.getenv("PASSWORD")
 
-    # como criar uma connection string usando pyodbc
     conn_str = (
         "DRIVER={ODBC Driver 18 for SQL Server};"
         f"SERVER={host_sql};"
@@ -31,35 +37,58 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
         "TrustServerCertificate=no;"
         "Connection Timeout=30;"
     )
+
     try:
-        # Criar a conexao com o banco
+        # Conectar ao banco e consultar os dados
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-
-            # fazer um select * na tabela
             cursor.execute("SELECT * FROM itsm.chamado")
+
+            # Buscar os dados antes de verificar se existem registros
             rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
 
-            # imprimir os dados da tabela usando logging.info()
-            if not rows:
-                logger.info("A consulta não retornou nenhum dado.")
-            else:
-                for row in rows:
-                    logger.info(f"Registro encontrado: {row}")
+        if not rows:
+            logger.info("A consulta não retornou nenhum dado.")
+            return
 
-    except pyodbc.Error as e:
-        logger.error(f"Erro ao conectar ou consultar o banco de dados: {e}")
+        logger.info(f"{len(rows)} linhas lidas de itsm.chamado")
 
-    print(host_sql)
-    logger.info(user_sql)
-    logger.info(database_sql)
-    logger.info(host_sql)
-    logger.info(password_sql)
+        # Criar o CSV em memória
+        buffer = io.StringIO()
+        writer = csv.writer(buffer)
+        writer.writerow(columns)
+        writer.writerows(rows)
 
-    # Criar a conexão com o banco de dados
-    # Fazer um select * na tabela
-    # Imprimir os dados da tabela usando logging.info
+        # Criar o caminho do arquivo
+        now = datetime.now(timezone.utc)
+        file_path = (
+            f"chamado/{now:%Y/%m/%d}/"
+            f"chamado_{now:%Y%m%d_%H%M%S}.csv"
+        )
 
+        # Conectar ao Data Lake
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+
+        file_client = (
+            datalake
+            .get_file_system_client("bronze")
+            .get_file_client(file_path)
+        )
+
+        # Enviar o arquivo CSV
+        file_client.upload_data(
+            buffer.getvalue().encode("utf-8"),
+            overwrite=True
+        )
+
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
+
+    except Exception:
+        logger.exception("Erro ao extrair ou gravar itsm.chamado")
+        raise
 
 # Chamado_sla
 @app.timer_trigger(
