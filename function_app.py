@@ -4,8 +4,8 @@ import logging
 import os
 from datetime import datetime, timezone
 
-import pyodbc
 import azure.functions as func
+import pyodbc
 from azure.storage.filedatalake import DataLakeServiceClient
 
 app = func.FunctionApp()
