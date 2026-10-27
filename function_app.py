@@ -1,8 +1,8 @@
+import csv
+import io
 import logging
 import os
-import io
-import csv
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import azure.functions as func
 import pyodbc
@@ -39,24 +39,28 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.chamado')
+            logger.info(f"{len(rows)} linhas lidas de itsm.chamado")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"chamado/{now:%Y/%m/%d}/chamado_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado: {str(e)}")
+        logging.error(f"Erro ao ler itsm.chamado: {e!s}")
         raise
 
 
@@ -87,24 +91,28 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.chamado_sla')
+            logger.info(f"{len(rows)} linhas lidas de itsm.chamado_sla")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"chamado_sla/{now:%Y/%m/%d}/chamado_sla_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado_sla: {str(e)}")
+        logging.error(f"Erro ao ler itsm.chamado_sla: {e!s}")
         raise
 
 
@@ -135,24 +143,28 @@ def extract_chamado_status_historico(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.chamado_status_historico')
+            logger.info(f"{len(rows)} linhas lidas de itsm.chamado_status_historico")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"chamado_status_historico/{now:%Y/%m/%d}/chamado_status_historico_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado_status_historico: {str(e)}")
+        logging.error(f"Erro ao ler itsm.chamado_status_historico: {e!s}")
         raise
 
 
@@ -183,24 +195,28 @@ def extract_cliente_organizacao(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.cliente_organizacao')
+            logger.info(f"{len(rows)} linhas lidas de itsm.cliente_organizacao")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"cliente_organizacao/{now:%Y/%m/%d}/cliente_organizacao_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.cliente_organizacao: {str(e)}")
+        logging.error(f"Erro ao ler itsm.cliente_organizacao: {e!s}")
         raise
 
 
@@ -231,24 +247,28 @@ def extract_analista(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.analista')
+            logger.info(f"{len(rows)} linhas lidas de itsm.analista")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"analista/{now:%Y/%m/%d}/analista_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.analista: {str(e)}")
+        logging.error(f"Erro ao ler itsm.analista: {e!s}")
         raise
 
 
@@ -279,24 +299,28 @@ def extract_categoria(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.categoria')
+            logger.info(f"{len(rows)} linhas lidas de itsm.categoria")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"categoria/{now:%Y/%m/%d}/categoria_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.categoria: {str(e)}")
+        logger.error(f"Erro ao ler itsm.categoria: {e!s}")
         raise
 
 
@@ -328,24 +352,30 @@ def extract_csat_avaliacao(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.csat_avaliacao')
+            logger.info(f"{len(rows)} linhas lidas de itsm.csat_avaliacao")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
-        file_path = f"csat_avaliacao/{now:%Y/%m/%d}/csat_avaliacao_{now:%Y%m%d_%H%M%S}.csv"
+        now = datetime.now(UTC)
+        file_path = (
+            f"csat_avaliacao/{now:%Y/%m/%d}/csat_avaliacao_{now:%Y%m%d_%H%M%S}.csv"
+        )
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.csat_avaliacao: {str(e)}")
+        logger.error(f"Erro ao ler itsm.csat_avaliacao: {e!s}")
         raise
 
 
@@ -376,24 +406,28 @@ def extract_fila(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.fila')
+            logger.info(f"{len(rows)} linhas lidas de itsm.fila")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"fila/{now:%Y/%m/%d}/fila_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.fila: {str(e)}")
+        logger.error(f"Erro ao ler itsm.fila: {e!s}")
         raise
 
 
@@ -424,24 +458,28 @@ def extract_sla(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.sla')
+            logger.info(f"{len(rows)} linhas lidas de itsm.sla")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"sla/{now:%Y/%m/%d}/sla_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.sla: {str(e)}")
+        logger.error(f"Erro ao ler itsm.sla: {e!s}")
         raise
 
 
@@ -472,22 +510,26 @@ def extract_solicitante(myTimer: func.TimerRequest) -> None:
             cursor.execute(query)
             rows = cursor.fetchall()
             columns = [col[0] for col in cursor.description]
-            logging.info(f'{len(rows)} linhas lidas de itsm.solicitante')
+            logger.info(f"{len(rows)} linhas lidas de itsm.solicitante")
 
         buffer = io.StringIO()
         writer = csv.writer(buffer)
         writer.writerow(columns)
         writer.writerows(rows)
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         file_path = f"solicitante/{now:%Y/%m/%d}/solicitante_{now:%Y%m%d_%H%M%S}.csv"
 
-        datalake = DataLakeServiceClient.from_connection_string(os.getenv("DATALAKE_CONNECTION_STRING"))
-        file_client = datalake.get_file_system_client("bronze").get_file_client(file_path)
+        datalake = DataLakeServiceClient.from_connection_string(
+            os.getenv("DATALAKE_CONNECTION_STRING")
+        )
+        file_client = datalake.get_file_system_client("bronze").get_file_client(
+            file_path
+        )
         file_client.upload_data(buffer.getvalue().encode("utf-8"), overwrite=True)
 
-        logging.info(f'Arquivo gravado em bronze/{file_path}')
+        logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.solicitante: {str(e)}")
+        logger.error(f"Erro ao ler itsm.solicitante: {e!s}")
         raise
