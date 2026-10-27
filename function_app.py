@@ -61,7 +61,7 @@ def extract_chamado(myTimer: func.TimerRequest) -> None:
         logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado: {e!s}")
+        logger.error(f"Erro ao ler itsm.chamado: {e!s}")
         raise
 
 
@@ -113,7 +113,7 @@ def extract_chamado_sla(myTimer: func.TimerRequest) -> None:
         logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado_sla: {e!s}")
+        logger.error(f"Erro ao ler itsm.chamado_sla: {e!s}")
         raise
 
 
@@ -165,7 +165,7 @@ def extract_chamado_status_historico(myTimer: func.TimerRequest) -> None:
         logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.chamado_status_historico: {e!s}")
+        logger.error(f"Erro ao ler itsm.chamado_status_historico: {e!s}")
         raise
 
 
@@ -217,7 +217,7 @@ def extract_cliente_organizacao(myTimer: func.TimerRequest) -> None:
         logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.cliente_organizacao: {e!s}")
+        logger.error(f"Erro ao ler itsm.cliente_organizacao: {e!s}")
         raise
 
 
@@ -269,7 +269,7 @@ def extract_analista(myTimer: func.TimerRequest) -> None:
         logger.info(f"Arquivo gravado em bronze/{file_path}")
 
     except Exception as e:
-        logging.error(f"Erro ao ler itsm.analista: {e!s}")
+        logger.error(f"Erro ao ler itsm.analista: {e!s}")
         raise
 
 
